@@ -1,0 +1,98 @@
+<UserControl x:Class="MacroForge.SimplePanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:MacroForge"
+             FontFamily="Segoe UI" FontSize="12">
+
+    <StackPanel>
+
+        <Border Style="{StaticResource Card}">
+            <!-- Etiquetas en columna Auto: crecen o se encogen con el idioma -->
+            <Grid Grid.IsSharedSizeScope="True">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="SimpleLabel"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Clic: botón del ratón -->
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Botón"
+                           Style="{StaticResource RowLabel}" Margin="0,0,12,7"
+                           Visibility="{Binding ShowMouseButton, Converter={StaticResource BoolToVis}}"/>
+                <ComboBox Grid.Row="0" Grid.Column="1" Style="{StaticResource Combo}"
+                          MinWidth="150" HorizontalAlignment="Left" Margin="0,0,0,7"
+                          ItemsSource="{x:Static local:ButtonChoice.All}"
+                          DisplayMemberPath="Label"
+                          SelectedValuePath="Value"
+                          SelectedValue="{Binding MouseButton, Mode=TwoWay}"
+                          Visibility="{Binding ShowMouseButton, Converter={StaticResource BoolToVis}}"/>
+
+                <!-- Tecla: qué tecla se pulsa -->
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Tecla"
+                           Style="{StaticResource RowLabel}" Margin="0,0,12,7"
+                           Visibility="{Binding ShowKey, Converter={StaticResource BoolToVis}}"/>
+                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="0,0,0,7"
+                            Visibility="{Binding ShowKey, Converter={StaticResource BoolToVis}}">
+                    <TextBox Style="{StaticResource Field}" Width="86"
+                             Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Style="{StaticResource Btn}" Content="Capturar"
+                            Click="CaptureKey_Click" Margin="6,0,0,0"/>
+                </StackPanel>
+
+                <!-- Velocidad -->
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Velocidad"
+                           Style="{StaticResource RowLabel}" Margin="0,0,12,7"/>
+                <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="0,0,0,7">
+                    <TextBox Style="{StaticResource Field}" Width="64"
+                             Text="{Binding IntervalText, UpdateSourceTrigger=PropertyChanged}"/>
+                    <ComboBox Style="{StaticResource Combo}" MinWidth="124" Margin="6,0,0,0"
+                              HorizontalAlignment="Left"
+                              SelectedIndex="{Binding IntervalUnitIndex, Mode=TwoWay}">
+                        <ComboBoxItem Content="milisegundos"/>
+                        <ComboBoxItem Content="segundos"/>
+                    </ComboBox>
+                </StackPanel>
+
+                <!-- Repeticiones -->
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Veces"
+                           Style="{StaticResource RowLabel}" Margin="0,0,12,0"/>
+                <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+                    <TextBox Style="{StaticResource Field}" Width="64" IsEnabled="{Binding Finite}"
+                             Text="{Binding RepeatText, UpdateSourceTrigger=PropertyChanged}"/>
+                    <CheckBox FontSize="12" Margin="14,0,0,0" VerticalAlignment="Center"
+                              IsChecked="{Binding Infinite}" ToolTip="Repite hasta que lo pares">
+                        <TextBlock Text="Sin límite" TextWrapping="Wrap" MaxWidth="160"/>
+                    </CheckBox>
+                </StackPanel>
+
+                <Border Grid.Row="3" Grid.ColumnSpan="2" Style="{StaticResource Sep}"/>
+
+                <!-- Límite de tiempo -->
+                <CheckBox Grid.Row="4" Grid.Column="0" FontSize="12"
+                          VerticalAlignment="Center" Margin="0,0,12,0"
+                          IsChecked="{Binding StopByDuration}"
+                          ToolTip="Detener el macro después de este tiempo">
+                    <TextBlock Text="Tiempo" TextWrapping="Wrap" MaxWidth="150"/>
+                </CheckBox>
+                <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal">
+                    <TextBox Style="{StaticResource Field}" Width="64" IsEnabled="{Binding StopByDuration}"
+                             Text="{Binding DurationText, UpdateSourceTrigger=PropertyChanged}"/>
+                    <ComboBox Style="{StaticResource Combo}" MinWidth="108" Margin="6,0,0,0"
+                              HorizontalAlignment="Left" IsEnabled="{Binding StopByDuration}"
+                              SelectedIndex="{Binding DurationUnitIndex, Mode=TwoWay}">
+                        <ComboBoxItem Content="segundos"/>
+                        <ComboBoxItem Content="minutos"/>
+                    </ComboBox>
+                </StackPanel>
+
+            </Grid>
+        </Border>
+
+    </StackPanel>
+</UserControl>

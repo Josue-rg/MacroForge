@@ -1,0 +1,117 @@
+<Window x:Class="MacroForge.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:MacroForge"
+        Title="MacroForge"
+        Width="460" Height="400"
+        MinWidth="420" MinHeight="360"
+        Background="#F4F5F7"
+        FontFamily="Segoe UI" FontSize="12"
+        WindowStartupLocation="CenterScreen"
+        UseLayoutRounding="True" SnapsToDevicePixels="True">
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TabControl x:Name="Tabs" Grid.Row="0" Background="Transparent" BorderThickness="0"
+                    Padding="0">
+
+            <TabItem Header="Autoclic" Style="{StaticResource Tab}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Padding="0">
+                    <local:SimplePanel DataContext="{Binding ClickSettings}" Margin="0,6,0,0"/>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="Auto-tecla" Style="{StaticResource Tab}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Padding="0">
+                    <local:SimplePanel DataContext="{Binding KeySettings}" Margin="0,6,0,0"/>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="Avanzado" Style="{StaticResource Tab}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Padding="0">
+                    <StackPanel Margin="0,6,0,0">
+
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+
+                                <!-- Veces que se repite la grabación -->
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                    <TextBlock Text="Veces" Style="{StaticResource RowLabel}"/>
+                                    <TextBox Style="{StaticResource Field}" Width="64"
+                                             Text="{Binding RepeatText, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBlock Text="(0 = ∞)" Foreground="#9CA3AF" FontSize="10.5"
+                                               VerticalAlignment="Center" Margin="6,0,0,0"/>
+                                </StackPanel>
+
+                                <!-- Reproducir / parar la grabación -->
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Style="{StaticResource BtnPlay}" Padding="14,5" Margin="0,0,6,0"
+                                            Click="Play_Click" IsEnabled="{Binding CanPlay}"
+                                            Content="{Binding PlayLabel}"
+                                            ToolTip="Reproduce la grabación"/>
+                                    <Button Style="{StaticResource BtnDanger}" Padding="14,5"
+                                            Click="PlayStop_Click" IsEnabled="{Binding CanPlayStop}"
+                                            Content="{Binding PlayStopLabel}"
+                                            ToolTip="Para la reproducción"/>
+                                </StackPanel>
+
+                                <TextBlock Text="{Binding RecordInfo}" Style="{StaticResource Hint}"/>
+
+                            </StackPanel>
+                        </Border>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+        </TabControl>
+
+        <!-- Acciones principales (compactas, sin repetir el nombre de la app) -->
+        <WrapPanel Grid.Row="1" HorizontalAlignment="left" Margin="0,8,0,0">
+            <!-- La tecla de este botón se elige con Configurar -->
+            <Button Style="{StaticResource BtnAccent}" Padding="9,3" Margin="0,0,5,0"
+                    Click="Start_Click" IsEnabled="{Binding CanStart}"
+                    ToolTip="Inicia el macro o empieza a grabar en Avanzado">
+                <TextBlock Text="{Binding StartLabel}"/>
+            </Button>
+
+            <Button Style="{StaticResource BtnGhost}" Padding="9,3" Margin="0,0,5,0"
+                    Click="Configure_Click" IsEnabled="{Binding CanConfigure}"
+                    ToolTip="Elige las teclas de los atajos">
+                <TextBlock Text="⚙️"/>
+            </Button>
+
+            <!-- La tecla de este botón se elige con Configurar -->
+            <Button Style="{StaticResource BtnDanger}" Padding="9,3"
+                    Click="Stop_Click" IsEnabled="{Binding CanStop}"
+                    ToolTip="Detiene el macro o la grabación">
+                <TextBlock Text="{Binding StopLabel}"/>
+            </Button>
+        </WrapPanel>
+
+
+        <!-- Pie: estado y archivo -->
+        <Grid Grid.Row="2" Margin="0,8,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="{Binding Status}" Foreground="#8A9099" FontSize="10.5"
+                       VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,10,0"/>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                <Button Style="{StaticResource Btn}" Content="Abrir" Click="Open_Click"
+                        Padding="8,3" Margin="0,0,5,0"/>
+                <Button Style="{StaticResource Btn}" Content="Guardar" Click="Save_Click"
+                        Padding="8,3"/>
+            </StackPanel>
+        </Grid>
+
+    </Grid>
+</Window>
